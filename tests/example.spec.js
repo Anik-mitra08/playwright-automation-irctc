@@ -6,7 +6,7 @@ import { spawnSync } from "child_process";
 dotenv.config();
 
 test.setTimeout(300000);
-
+// update for git push
 // test.describe.configure({ mode: "parallel" }); Excercise of test.describe.parallel by uncommenting above line and commenting below test block
 // test.describe.configure({ mode: "serial" }); Excercise of test.describe.serial by uncommenting above line and commenting below test block
 function askCaptchaFromTerminal() {
