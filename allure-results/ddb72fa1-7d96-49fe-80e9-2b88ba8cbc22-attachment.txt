@@ -1,0 +1,12 @@
+✅ Login flow completed successfully
+✅ Journey details filled
+✅ Train class selected
+✅ Train 53178 found
+✅ Journey date refreshed and selected
+✅ Passenger details filled
+✅ Berth preference selected
+✅ Mobile number filled
+✅ UPI button selected
+⚠️ CAPTCHA detected
+👉 Look at browser and enter in terminal
+Enter CAPTCHA and press ENTER: 

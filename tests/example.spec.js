@@ -1,15 +1,28 @@
 import { test, expect } from "@playwright/test";
 import dotenv from "dotenv";
 import fs from "fs";
+import { spawnSync } from "child_process";
 
 dotenv.config();
 
 test.setTimeout(300000);
 
-test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
-  // -------- SET VIEWPORT --------
-  await page.setViewportSize({ width: 460, height: 760 });
+// test.describe.configure({ mode: "parallel" }); Excercise of test.describe.parallel by uncommenting above line and commenting below test block
+// test.describe.configure({ mode: "serial" }); Excercise of test.describe.serial by uncommenting above line and commenting below test block
+function askCaptchaFromTerminal() {
+  const result = spawnSync(
+    "powershell.exe",
+    ["-NoProfile", "-Command", "Read-Host 'Enter CAPTCHA'"],
+    {
+      encoding: "utf-8",
+      stdio: ["inherit", "pipe", "inherit"],
+    },
+  );
 
+  return result.stdout.trim();
+}
+
+test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
   // -------- OPEN WEBSITE --------
   await page.goto("https://www.irctc.co.in/nget/train-search", {
     waitUntil: "domcontentloaded",
@@ -168,7 +181,7 @@ test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
 
       // -------- CLICK DATE (Thu, 30 Apr) --------
       await page
-        .locator("text=Thu, 30 Apr")
+        .locator("strong", { hasText: "Thu, 30 Apr" })
         .click()
         .catch(async () => {
           await page
@@ -264,44 +277,63 @@ test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
 
       await page.waitForTimeout(5000);
 
-      // -------- CAPTCHA HANDLING (DELAY-AWARE) --------
+      // // -------- CAPTCHA HANDLING (Browser input) --------
 
-      console.log("⏳ Waiting to see if CAPTCHA appears...");
+      // console.log("⏳ Waiting to see if CAPTCHA appears...");
 
-      // Wait for either CAPTCHA OR next page
-      let captchaAppeared = false;
+      // // Wait for either CAPTCHA OR next page
+      // let captchaAppeared = false;
 
-      try {
-        await Promise.race([
-          (async () => {
-            const captcha = page.locator("#captcha");
-            await captcha.waitFor({ state: "visible", timeout: 55000 });
-            captchaAppeared = true;
-          })(),
+      // try {
+      //   await Promise.race([
+      //     (async () => {
+      //       const captcha = page.locator("#captcha");
+      //       await captcha.waitFor({ state: "visible", timeout: 55000 });
+      //       captchaAppeared = true;
+      //     })(),
 
-          page.waitForNavigation({ timeout: 55000 }),
-        ]);
-      } catch {
-        console.log("⚠️ Neither CAPTCHA nor navigation detected");
-      }
+      //     page.waitForNavigation({ timeout: 55000 }),
+      //   ]);
+      // } catch {
+      //   console.log("⚠️ Neither CAPTCHA nor navigation detected");
+      // }
 
-      // ---- HANDLE CASES ----
+      // // ---- HANDLE CASES ----
 
-      if (captchaAppeared) {
+      // if (captchaAppeared) {
+      //   console.log("⚠️ CAPTCHA detected");
+      //   console.log("👉 Solve it FAST (15-25 sec)");
+
+      //   // Wait for user to solve it
+      //   try {
+      //     await page.waitForNavigation({ timeout: 25000 });
+      //   } catch {
+      //     console.log("⚠️ Navigation not detected after CAPTCHA");
+      //   }
+
+      //   console.log("✅ CAPTCHA handled");
+      // } else {
+      //   console.log("✅ No CAPTCHA, moved to next step");
+      // }
+      // -------- CAPTCHA HANDLING FROM TERMINAL --------
+
+      const captchaField = page.locator("#captcha");
+
+      if (await captchaField.isVisible().catch(() => false)) {
         console.log("⚠️ CAPTCHA detected");
-        console.log("👉 Solve it FAST (15-25 sec)");
+        console.log("👉 Type CAPTCHA in terminal and press ENTER");
 
-        // Wait for user to solve it
-        try {
-          await page.waitForNavigation({ timeout: 25000 });
-        } catch {
-          console.log("⚠️ Navigation not detected after CAPTCHA");
+        const captchaValue = askCaptchaFromTerminal();
+
+        if (!captchaValue) {
+          throw new Error("❌ CAPTCHA not entered");
         }
 
-        console.log("✅ CAPTCHA handled");
-      } else {
-        console.log("✅ No CAPTCHA, moved to next step");
+        await captchaField.fill(captchaValue);
+
+        console.log("✅ CAPTCHA filled from terminal");
       }
+
       // -------- CLICK CONTINUE --------
       await page.waitForTimeout(4000 + Math.random() * 3000);
       await page.getByRole("button", { name: "Continue" }).click();
@@ -373,3 +405,31 @@ test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
     }
   }
 });
+
+// Excercise of test.only by uncommenting below code and commenting above test block
+
+// test.only("IRCTC Full Login Flow (Mobile View)1", async ({
+//   page,
+// }, testInfo) => {
+//   // -------- OPEN WEBSITE --------
+//   await page.goto("https://www.irctc.co.in/nget/train-search", {
+//     waitUntil: "domcontentloaded",
+//     timeout: 60000,
+//   });
+
+//   await page.waitForTimeout(5000);
+// });
+
+// Excercise of test.skip by uncommenting below code and commenting above test block
+
+// test.skip("IRCTC Full Login Flow (Mobile View)1", async ({
+//   page,
+// }, testInfo) => {
+//   // -------- OPEN WEBSITE --------
+//   await page.goto("https://www.irctc.co.in/nget/train-search", {
+//     waitUntil: "domcontentloaded",
+//     timeout: 60000,
+//   });
+
+//   await page.waitForTimeout(5000);
+// });

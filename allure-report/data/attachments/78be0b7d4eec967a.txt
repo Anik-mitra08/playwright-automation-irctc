@@ -1,0 +1,4 @@
+✅ Login flow completed successfully
+✅ Journey details filled
+✅ Train class selected
+✅ Train 53178 found

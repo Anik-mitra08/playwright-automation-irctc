@@ -1,0 +1,22 @@
+✅ Login flow completed successfully
+✅ Journey details filled
+✅ Train class selected
+✅ Train 53178 found
+✅ Journey date refreshed and selected
+✅ Passenger details filled
+✅ Berth preference selected
+✅ Mobile number filled
+✅ UPI button selected
+⏳ Waiting to see if CAPTCHA appears...
+⚠️ CAPTCHA detected
+👉 Solve it FAST (15-25 sec)
+⚠️ Navigation not detected after CAPTCHA
+✅ CAPTCHA handled
+Moved to Payment Page..
+✅ IRCTC iPay selected
+✅ Payment continue clicked
+✅ IRCTC payment card clicked
+✅ Pay & Book clicked
+Final Payment Page..
+✅ Paytm option selected
+✅ Pay button clicked
