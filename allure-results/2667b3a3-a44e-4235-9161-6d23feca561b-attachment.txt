@@ -1,3 +1,0 @@
-✅ Login flow completed successfully
-✅ Journey details filled
-✅ Train class selected
