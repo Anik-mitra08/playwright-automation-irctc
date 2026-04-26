@@ -12,14 +12,18 @@ test.setTimeout(300000);
 function askCaptchaFromTerminal() {
   const result = spawnSync(
     "powershell.exe",
-    ["-NoProfile", "-Command", "Read-Host 'Enter CAPTCHA'"],
+    [
+      "-NoProfile",
+      "-Command",
+      "$input = Read-Host 'Enter CAPTCHA'; Write-Output $input",
+    ],
     {
       encoding: "utf-8",
-      stdio: ["inherit", "pipe", "inherit"],
+      stdio: "inherit",
     },
   );
 
-  return result.stdout.trim();
+  return result.stdout ? result.stdout.trim() : "";
 }
 
 test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
