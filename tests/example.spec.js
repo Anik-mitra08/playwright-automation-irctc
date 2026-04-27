@@ -9,22 +9,23 @@ test.setTimeout(300000);
 
 // test.describe.configure({ mode: "parallel" }); Excercise of test.describe.parallel by uncommenting above line and commenting below test block
 // test.describe.configure({ mode: "serial" }); Excercise of test.describe.serial by uncommenting above line and commenting below test block
-function askCaptchaFromTerminal() {
-  const result = spawnSync(
-    "powershell.exe",
-    [
-      "-NoProfile",
-      "-Command",
-      "$input = Read-Host 'Enter CAPTCHA'; Write-Output $input",
-    ],
-    {
-      encoding: "utf-8",
-      stdio: "inherit",
-    },
-  );
 
-  return result.stdout ? result.stdout.trim() : "";
-}
+// function askCaptchaFromTerminal() {
+//   const result = spawnSync(
+//     "powershell.exe",
+//     [
+//       "-NoProfile",
+//       "-Command",
+//       "$input = Read-Host 'Enter CAPTCHA'; Write-Output $input",
+//     ],
+//     {
+//       encoding: "utf-8",
+//       stdio: "inherit",
+//     },
+//   );
+
+//   return result.stdout ? result.stdout.trim() : "";
+// }
 
 test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
   // -------- OPEN WEBSITE --------
@@ -281,62 +282,63 @@ test("IRCTC Full Login Flow (Mobile View)", async ({ page }, testInfo) => {
 
       await page.waitForTimeout(5000);
 
-      // // -------- CAPTCHA HANDLING (Browser input) --------
+      // -------- CAPTCHA HANDLING (Browser input) --------
 
-      // console.log("⏳ Waiting to see if CAPTCHA appears...");
+      console.log("⏳ Waiting to see if CAPTCHA appears...");
 
-      // // Wait for either CAPTCHA OR next page
-      // let captchaAppeared = false;
+      // Wait for either CAPTCHA OR next page
+      let captchaAppeared = false;
 
-      // try {
-      //   await Promise.race([
-      //     (async () => {
-      //       const captcha = page.locator("#captcha");
-      //       await captcha.waitFor({ state: "visible", timeout: 55000 });
-      //       captchaAppeared = true;
-      //     })(),
+      try {
+        await Promise.race([
+          (async () => {
+            const captcha = page.locator("#captcha");
+            await captcha.waitFor({ state: "visible", timeout: 55000 });
+            captchaAppeared = true;
+          })(),
 
-      //     page.waitForNavigation({ timeout: 55000 }),
-      //   ]);
-      // } catch {
-      //   console.log("⚠️ Neither CAPTCHA nor navigation detected");
-      // }
+          page.waitForNavigation({ timeout: 55000 }),
+        ]);
+      } catch {
+        console.log("⚠️ Neither CAPTCHA nor navigation detected");
+      }
 
-      // // ---- HANDLE CASES ----
+      // ---- HANDLE CASES ----
 
-      // if (captchaAppeared) {
-      //   console.log("⚠️ CAPTCHA detected");
-      //   console.log("👉 Solve it FAST (15-25 sec)");
-
-      //   // Wait for user to solve it
-      //   try {
-      //     await page.waitForNavigation({ timeout: 25000 });
-      //   } catch {
-      //     console.log("⚠️ Navigation not detected after CAPTCHA");
-      //   }
-
-      //   console.log("✅ CAPTCHA handled");
-      // } else {
-      //   console.log("✅ No CAPTCHA, moved to next step");
-      // }
-      // -------- CAPTCHA HANDLING FROM TERMINAL --------
-
-      const captchaField = page.locator("#captcha");
-
-      if (await captchaField.isVisible().catch(() => false)) {
+      if (captchaAppeared) {
         console.log("⚠️ CAPTCHA detected");
-        console.log("👉 Type CAPTCHA in terminal and press ENTER");
+        console.log("👉 Solve it FAST (15-25 sec)");
 
-        const captchaValue = askCaptchaFromTerminal();
-
-        if (!captchaValue) {
-          throw new Error("❌ CAPTCHA not entered");
+        // Wait for user to solve it
+        try {
+          await page.waitForNavigation({ timeout: 25000 });
+        } catch {
+          console.log("⚠️ Navigation not detected after CAPTCHA");
         }
 
-        await captchaField.fill(captchaValue);
-
-        console.log("✅ CAPTCHA filled from terminal");
+        console.log("✅ CAPTCHA handled");
+      } else {
+        console.log("✅ No CAPTCHA, moved to next step");
       }
+
+      // // -------- CAPTCHA HANDLING FROM TERMINAL --------
+
+      // const captchaField = page.locator("#captcha");
+
+      // if (await captchaField.isVisible().catch(() => false)) {
+      //   console.log("⚠️ CAPTCHA detected");
+      //   console.log("👉 Type CAPTCHA in terminal and press ENTER");
+
+      //   const captchaValue = askCaptchaFromTerminal();
+
+      //   if (!captchaValue) {
+      //     throw new Error("❌ CAPTCHA not entered");
+      //   }
+
+      //   await captchaField.fill(captchaValue);
+
+      //   console.log("✅ CAPTCHA filled from terminal");
+      // }
 
       // -------- CLICK CONTINUE --------
       await page.waitForTimeout(4000 + Math.random() * 3000);
