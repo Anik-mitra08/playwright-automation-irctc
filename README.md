@@ -1,33 +1,57 @@
+<!-- BANNER -->
+<h1 align="center">🚀 IRCTC Automation using Playwright</h1>
+
+<p align="center">
+  <b>End-to-End Booking Flow Automation | Jenkins CI | Allure Reports</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Playwright-Automation-green?style=for-the-badge&logo=playwright" />
+  <img src="https://img.shields.io/badge/Jenkins-CI/CD-red?style=for-the-badge&logo=jenkins" />
+  <img src="https://img.shields.io/badge/Allure-Reporting-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+</p>
+
+---
+
 # 📊 Playwright Automation Report – IRCTC Booking Flow
 
-**Date:** 17 April 2026
+📅 **Date:** 17 April 2026
 
+---
 
 ## 📌 1. Project Overview
 
-This project automates the IRCTC train booking workflow using Playwright.
-The automation simulates a real user journey from login to passenger detail submission.
+This project automates the **IRCTC train booking workflow** using Playwright.  
+It simulates a **real user journey** from login to passenger detail submission and payment flow navigation.
+
+⚠️ Due to IRCTC anti-bot protection, **CAPTCHA is handled manually** while the rest of the flow is automated.
+
+> 🚀 Developed a complete CI/CD pipeline using Jenkins to automate Playwright test execution for a real-world IRCTC booking flow.
 
 ---
 
 ## 🛠 2. Technology Stack
 
-* **Automation Tool:** Playwright
-* **Language:** JavaScript
-* **Environment:** Node.js
-* **Version Control:** Git & GitHub
-* **IDE:** VS Code
+| Tool          | Usage                |
+| ------------- | -------------------- |
+| 🎭 Playwright | Automation Framework |
+| 🟢 JavaScript | Programming Language |
+| ⚙️ Node.js    | Runtime Environment  |
+| 🔁 Jenkins    | CI/CD Pipeline       |
+| 📊 Allure     | Test Reporting       |
+| 🧠 GitHub     | Version Control      |
+| 💻 VS Code    | IDE                  |
 
 ---
 
 ## 🔐 3. Environment Setup
 
-* Configured `.env` file to store:
-
-  * IRCTC Username
-  * IRCTC Password
-* Used `dotenv` to securely access credentials
-* Created reusable screenshot utility
+- Created `.env` file to store:
+  - IRCTC Username
+  - IRCTC Password
+- Used `dotenv` for secure credential handling
+- Implemented reusable screenshot utility
 
 ---
 
@@ -35,142 +59,90 @@ The automation simulates a real user journey from login to passenger detail subm
 
 ### 🔹 4.1 Launch Application
 
-* Opened IRCTC train search page
-* Set mobile viewport (460x760)
-* Handled initial popup (OK button)
+- Opened IRCTC train search page
+- Set mobile viewport (460x760)
+- Handled initial popup
 
 ---
 
 ### 🔹 4.2 Login Functionality
 
-* Clicked login button (mobile UI handling included)
-* Entered username and password from `.env`
-* Clicked **Sign In**
-* Added validation for login success/failure
-* Captured screenshots at each step
+- Clicked login button (mobile UI supported)
+- Entered credentials from `.env`
+- Clicked **Sign In**
+- Added login success/failure validation
+- Captured screenshots
 
 ---
 
 ### 🔹 4.3 Train Search
 
-* Entered **From Station:** BERHAMPORE CRT - BPC
-* Entered **To Station:** SEALDAH - SDAH
-* Selected journey date (30th)
-* Clicked **Search Train**
-* Handled auto-suggestion dropdown using keyboard actions
+- From: **BERHAMPORE CRT - BPC**
+- To: **SEALDAH - SDAH**
+- Selected journey date
+- Clicked **Search Train**
+- Handled auto-suggestion dropdown
 
 ---
 
 ### 🔹 4.4 Class Selection
 
-* Opened **All Classes** dropdown
-* Selected **Sleeper (SL)** option
+- Opened dropdown
+- Selected **Sleeper (SL)**
 
 ---
 
 ### 🔹 4.5 Train Selection (Dynamic Logic)
 
-* Iterated through train list
-* Identified train using **Train No: 53178**
-* Clicked **Refresh Availability**
-* Selected specific date (Thu, 30 Apr)
+- Iterated through train list
+- Selected **Train No: 53178**
+- Clicked **Refresh Availability**
+- Selected specific date
 
 ---
 
 ### 🔹 4.6 Booking Action
 
-* Clicked **Book Now** button
-* Waited for navigation to passenger details page
+- Clicked **Book Now**
+- Waited for navigation
 
 ---
 
-### 🔹 4.7 Passenger Details Form
+### 🔹 4.7 Passenger Details
 
-* Entered:
-
-  * Name: Anik Mitra
-  * Age: 27
-* Selected:
-
-  * Gender: Male
-  * Berth Preference: Side Lower
-* Filled **Mobile Number (Contact Details)**
-* Ensured form validation by triggering input events
+- Entered Name & Age
+- Selected Gender & Berth
+- Filled Mobile Number
+- Triggered validations
 
 ---
 
-### 🔹 4.8 Continue to Next Step
+### 🔹 4.8 Continue Flow
 
-* Clicked **Continue** button
-* Added waits and validation checks
-* Handled cases where page does not proceed due to:
-
-  * Validation issues
-  * IRCTC bot detection
-
----
-
-## 📸 5. Reporting & Debugging
-
-* Implemented **automatic screenshots** at each step
-* Stored screenshots with:
-
-  * Test name
-  * Timestamp
-* Added console logs for:
-
-  * Success scenarios
-  * Failure/debug tracking
+- Clicked **Continue**
+- Added waits and validations
+- Handled failures due to:
+  - Validation issues
+  - IRCTC bot detection
 
 ---
 
-## ⚠️ 6. Challenges Faced
+## 🤖 5. Jenkins CI/CD Pipeline
 
-### 🔸 Dynamic Elements
+### 🏗 CI/CD Implementation (Designed & Implemented)
 
-* IRCTC uses dynamic Angular components
-* Required smart locators and waits
+- Designed and implemented a **Jenkins CI pipeline** for automated test execution
+- Integrated **GitHub repository with Jenkins** for source control
+- Configured pipeline stages:
+  - Code checkout
+  - Dependency installation
+  - Test execution using Playwright
+  - Allure report generation
+- Enabled **artifact archiving** (screenshots & videos) for debugging
+- Executed tests in **headed mode with single worker** to handle IRCTC anti-bot restrictions
 
-### 🔸 Strict Mode Errors
+### 🔁 Flow:
 
-* Multiple elements matched → resolved using `.nth()` and better locators
-
-### 🔸 Bot Detection / CAPTCHA
-
-* IRCTC restricts automation beyond certain steps
-* Payment page sometimes not accessible
-
-### 🔸 XPath Instability
-
-* Long XPaths caused failures → improved with text-based locators
-
----
-
-## ✅ 7. Key Achievements
-
-* Automated **end-to-end booking flow (till passenger details)**
-* Implemented **dynamic train selection logic**
-* Handled **real-world issues (timeouts, dropdowns, validation)**
-* Integrated **GitHub version control**
-* Built a **realistic QA automation project**
-
----
-
-## 🚀 8. Conclusion
-
-This project demonstrates strong understanding of:
-
-* UI Automation using Playwright
-* Real-world test scenario handling
-* Debugging and stability improvements
-* End-to-end workflow automation
-
-The implementation closely simulates actual user behavior and is suitable for showcasing automation skills in QA interviews.
-
----
-
-## 👨‍💻 Author
-
-**Anik Mitra**
-
----
+```text
+GitHub → Jenkins → Install → Run Tests → CAPTCHA → Allure Report
+```
